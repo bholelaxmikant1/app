@@ -1,0 +1,55 @@
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+
+class Profile extends Component {
+  render() {
+    const { user: currentUser } = this.props;
+
+    if (!currentUser) {
+      return <Redirect to="/login" />;
+    } else if (currentUser.role.includes("ADMIN")) {
+      return <Redirect to="/home" />;
+    } else if (currentUser.role.includes("VENDOR")) {
+      return <Redirect to="/home" />;
+    } else if (currentUser.role.includes("EMPLOYEE")) {
+      return <Redirect to="/home" />;
+    } else if (currentUser.role.includes("CUSTOMER")) {
+      return <Redirect to="/home" />;
+    }
+
+    return (
+      <div className="container">
+        <header className="jumbotron">
+          <h3>
+            <strong>{currentUser.username}</strong> Profile
+          </h3>
+        </header>
+        <p>
+          <strong>Token:</strong> {currentUser.token.substring(0, 20)} ...{" "}
+          {currentUser.token.substr(currentUser.token.length - 20)}
+        </p>
+        <p>
+          <strong>Id:</strong> {currentUser.id}
+        </p>
+        <p>
+          <strong>Email:</strong> {currentUser.email}
+        </p>
+        <strong>Authorities:</strong>
+        <ul>
+          {currentUser.roles &&
+            currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
+        </ul>
+      </div>
+    );
+  }
+}
+
+function mapStateToProps(state) {
+  const { user } = state.auth;
+  return {
+    user,
+  };
+}
+
+export default connect(mapStateToProps)(Profile);
